@@ -288,7 +288,7 @@ Objects/libapt64.a: $(libapt64)
 
 MobileCydia: $(object) entitlements.xml $(lapt)
 	@echo "[link] $@"
-	$(cycc) -o $@ $(filter %.o,$^) $(link) $(libs) $(uikit) -Wl,-sdk_version,11.0
+	$(cycc) -o $@ $(filter %.o,$^) $(link) $(libs) $(uikit) -Wl
 	@mkdir -p bins
 	@cp -a $@ bins/$@-$(version)_$(shell date +%s)
 	@echo "[strp] $@"
@@ -305,7 +305,7 @@ postinst: postinst.mm CyteKit/stringWith.mm CyteKit/stringWith.h CyteKit/UCPlatf
 	@ldid -T0 -Sgenent.xml $@
 
 debs/cydia_$(version)_iphoneos-arm.deb: MobileCydia preinst postinst cydo $(images) $(shell find MobileCydia.app) cydia.control Library/startup $(shell find MobileCydia.app -name '*.strings')
-	fakeroot grm -rf _
+	fakeroot rm -rf _
 	mkdir -p _/var/lib/cydia
 
 	mkdir -p _/etc/apt
@@ -337,9 +337,9 @@ debs/cydia_$(version)_iphoneos-arm.deb: MobileCydia preinst postinst cydo $(imag
 
 	find _ -exec touch -t "$$(date -j -f "%s" +"%Y%m%d%H%M.%S" "$$(git show --format='format:%ct' | head -n 1)")" {} ';'
 
-	fakeroot gchown -R 0 _
-	fakeroot gchgrp -R 0 _
-	fakeroot gchmod 6755 _/usr/libexec/cydia/cydo
+	fakeroot chown -R 0 _
+	fakeroot chgrp -R 0 _
+	fakeroot chmod 6755 _/usr/libexec/cydia/cydo
 
 	mkdir -p debs
 	ln -sf debs/cydia_$(version)_iphoneos-arm.deb Cydia.deb
