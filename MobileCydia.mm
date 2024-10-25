@@ -8242,24 +8242,24 @@ static void HomeControllerReachabilityCallback(SCNetworkReachabilityRef reachabi
 }
 
 - (void) reloadSpringBoard {
-    Class $SBSRelaunchAction = objc_getClass("SBSRelaunchAction");
-    Class $FBSSystemService = objc_getClass("FBSSystemService");
-    pid_t sb_pid = launch_get_job_pid("com.apple.SpringBoard");
-    if ($SBSRelaunchAction && $FBSSystemService) {
-        id action = [$SBSRelaunchAction actionWithReason:@"respring" options:RestartRenderServer targetURL:nil];
-        id sharedService = [$FBSSystemService sharedService];
-        [sharedService sendActions:[NSSet setWithObject:action] withResult:nil];
-        for (int i=0; i<100; i++) {
-            if (kill(sb_pid, 0)) {
-                break;
-            }
-            usleep(1000);
-        }
-        if (kill(sb_pid, 0)) sleep(5);
-    }
-    system("/usr/libexec/cydia/cydo /bin/launchctl stop com.apple.SpringBoard");
-    sleep(15);
-    system("/usr/bin/killall backboardd SpringBoard");
+    // Class $SBSRelaunchAction = objc_getClass("SBSRelaunchAction");
+    // Class $FBSSystemService = objc_getClass("FBSSystemService");
+    // pid_t sb_pid = launch_get_job_pid("com.apple.SpringBoard");
+    // if ($SBSRelaunchAction && $FBSSystemService) {
+    //     id action = [$SBSRelaunchAction actionWithReason:@"respring" options:RestartRenderServer targetURL:nil];
+    //     id sharedService = [$FBSSystemService sharedService];
+    //     [sharedService sendActions:[NSSet setWithObject:action] withResult:nil];
+    //     for (int i=0; i<100; i++) {
+    //         if (kill(sb_pid, 0)) {
+    //             break;
+    //         }
+    //         usleep(1000);
+    //     }
+    //     if (kill(sb_pid, 0)) sleep(5);
+    // }
+    // system("/usr/libexec/cydia/cydo /bin/launchctl stop com.apple.SpringBoard");
+    // sleep(15);
+    system("/usr/bin/sbreload");
 }
 
 - (void) _saveConfig {
