@@ -5214,10 +5214,7 @@ bool DepSubstrate(const pkgCache::VerIterator &iterator) {
 
         case 4:
             _trace();
-            if (void (*SBReboot)(mach_port_t) = reinterpret_cast<void (*)(mach_port_t)>(dlsym(RTLD_DEFAULT, "SBReboot")))
-                SBReboot(SBSSpringBoardServerPort());
-            else
-                reboot2(RB_AUTOBOOT);
+            system("/bin/launchctl reboot userspace");
         break;
     }
 
